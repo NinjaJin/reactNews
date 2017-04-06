@@ -20,6 +20,13 @@ class MobileHeader extends React.Component {
 		};
 	}
 
+	componentWillMount() {
+		if(localStorage.userid!='') {
+			this.setState({hasLogined: true});
+			this.setState({userNickName: localStorage.userNickName,userid: localStorage.userid})
+		}
+	}
+
 	setModalVisible(value) {
 		this.setState({modalVisible: value});
 	};
@@ -54,6 +61,8 @@ class MobileHeader extends React.Component {
 			.then(response=>response.json())
 			.then(json=> {
 				this.setState({userNickName: json.NickUserName, userid: json.UserId});
+				localStorage.userid = json.UserId;
+				localStorage.userNickName = json.NickUserName;
 			});
 		if (this.state.action == "login") {
 			this.setState({hasLogined: true});
@@ -69,7 +78,7 @@ class MobileHeader extends React.Component {
 	render() {
 		let {getFieldDecorator} = this.props.form;
 		const userShow = this.state.hasLogined ?
-			<Link>
+			<Link to={`usercenter`}>
 				<Icon type="inbox"/>
 			</Link>
 			:
